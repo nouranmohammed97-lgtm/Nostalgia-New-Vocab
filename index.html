@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nostalgia: Difficult Words (A2)</title>
+<style>
+:root{--bg:#eaf1f7;--card:#fff;--ink:#16273d;--mute:#5b6b80;--line:#cdd9e6;--brand:#1f3a5f;--sun:#f2b84b;--ok:#2f8f5b;--okbg:#e2f4ea;--bad:#c9443f;--badbg:#fbe6e5;--hi:#e8f0fa}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1b2b;--card:#172a42;--ink:#eaf1f8;--mute:#9db0c6;--line:#2c4260;--brand:#8db7e8;--sun:#f2b84b;--ok:#5fcf93;--okbg:#14382a;--bad:#ff8782;--badbg:#42201f;--hi:#1e3452}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+.wrap{max-width:680px;margin:0 auto;padding:18px 16px 60px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+h1{font:700 1.15rem Georgia,serif;margin:0;color:var(--brand)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.icon{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;position:relative}
+.card.postcard{border:2px dashed var(--line)}
+.stamp{position:absolute;top:14px;right:14px;border:2px solid var(--sun);color:var(--sun);border-radius:6px;padding:2px 8px;font:700 .8rem Georgia,serif;transform:rotate(4deg)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:10px}
+.bar i{display:block;height:100%;width:0;background:var(--sun);transition:width .4s}
+.stats{display:flex;gap:14px;color:var(--mute);font-size:.92rem;margin-bottom:12px}
+.stats b{color:var(--ink)}
+.word{font:700 2.1rem/1.15 Georgia,serif;color:var(--brand);margin:6px 0 4px}
+.sent{color:var(--mute);margin:0 0 14px}
+.q{font-weight:600;margin:0 0 12px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;transition:transform .12s,border-color .12s,background .12s}
+.opt:hover:not(:disabled){border-color:var(--brand);transform:translateX(3px)}
+.opt .k{flex:none;width:28px;height:28px;border-radius:50%;background:var(--hi);display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.no{border-color:var(--bad);background:var(--badbg);animation:shake .35s}
+.opt:disabled{cursor:default}
+.opt:disabled:not(.ok):not(.no){opacity:.55}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.btn{background:var(--brand);color:var(--bg);border:0;border-radius:12px;padding:11px 20px;font-weight:700}
+.btn.ghost{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+.btn:hover{filter:brightness(1.08)}
+.box{border-radius:12px;padding:12px 14px;margin-top:10px}
+.hint{background:var(--hi)}
+.fb.ok{background:var(--okbg)}.fb.no{background:var(--badbg)}
+.hide{display:none}
+.menu button.set{display:flex;justify-content:space-between;width:100%;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;font-weight:600}
+.menu button.set:hover{border-color:var(--brand)}
+.seg{display:flex;background:var(--hi);border-radius:12px;padding:4px;margin:12px 0 16px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:8px;font-weight:600}
+.seg button.on{background:var(--brand);color:var(--bg)}
+.big{font:700 3rem Georgia,serif;color:var(--brand);margin:0}
+.rev{list-style:none;padding:0;margin:14px 0}
+.rev li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.rev small{color:var(--mute);display:block}
+.flip{perspective:900px;cursor:pointer;min-height:230px}
+.flip>div{min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;background:var(--card);border:2px dashed var(--line);border-radius:18px}
+.flip.back>div{border-style:solid;border-color:var(--sun);background:var(--hi)}
+.pron{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 10px;color:var(--mute)}
+.pron .ipa{font-family:"Segoe UI","Noto Sans",system-ui,sans-serif}
+.pron .say{font-size:.9rem;padding:4px 10px}
+.pron .rsp{color:var(--ink);font-weight:700;letter-spacing:.02em}
+.p{position:fixed;width:9px;height:9px;border-radius:2px;pointer-events:none;z-index:9}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>Nostalgia: difficult words</h1><button class="icon" id="mute" aria-label="Sound on or off">🔊</button></header>
+<main id="app"></main>
+</div>
+<script>
+// word, sentence from the video, correct definition, 3 wrong, hint, explanation, set (0 or 1)
+const Q=[
+["yearning","The soldiers had a strong yearning for their home.","a strong feeling that you want something",["a feeling of being very tired","a small pain in the body","a plan to travel"],"Think about how the soldiers felt about their mountain home.","A yearning is a very strong wish for something. The soldiers wanted to go home very much.",0],
+["mercenaries","Swiss mercenaries got sick far from home.","soldiers who fight for money",["farmers who live in the mountains","doctors who help soldiers","people who teach songs"],"These soldiers worked abroad.","Mercenaries are soldiers who fight for any country that pays them.",0],
+["discharged","The soldiers were so ill that they were often discharged.","told to leave the army",["paid more money","given a new job in a hospital","moved to a new country"],"The soldiers were too sick to stay.","Here, discharged means officially sent away from the army because the soldiers could not work.",0],
+["affliction","At first, nostalgia was seen as a Swiss affliction.","an illness or problem that makes people suffer",["a type of song","a kind of job","a holiday in the mountains"],"Doctors thought nostalgia was a kind of disease.","An affliction is something bad, like an illness, that makes people suffer.",0],
+["insomnia","Symptoms of nostalgia included insomnia.","not being able to sleep",["feeling very hungry","having a fast heartbeat","sleeping too much"],"Think about the word “sleep” and what can go wrong.","Insomnia means you cannot sleep well at night.",0],
+["desertion","Commanders were afraid of desertion.","when a soldier leaves the army without permission",["when soldiers win a battle","when soldiers sing together","when a soldier gets a prize"],"The commanders did not want the soldiers to leave.","Desertion is when a soldier runs away from the army. Commanders thought homesick soldiers might do this.",0],
+["vulnerable","Anyone away from home for a long time was vulnerable to nostalgia.","easy to hurt or affect",["very strong","very rich","very old"],"It is the opposite of “protected”.","If you are vulnerable to something, it can easily hurt you or affect you.",0],
+["poignant","Later, nostalgia was seen as a poignant experience.","making you feel sad and happy at the same time",["very funny","very boring","very loud"],"Nostalgia is a mix of feelings.","A poignant moment touches your feelings. It can be sweet and sad together, like remembering a happy time that is gone.",0],
+["distress","People use nostalgia to reduce distress.","a feeling of great worry or sadness",["a feeling of being very hungry","excitement before a trip","a loud noise"],"The video says nostalgia can help when people feel bad.","Distress is strong worry, pain or sadness. The video says nostalgia can help reduce it.",0],
+["restorative","Nostalgia can be a restorative way of coping with problems.","helping you feel well or strong again",["making you more tired","very old and traditional","costing a lot of money"],"Look at the word “restore”.","Restorative comes from “restore” (to bring something back). A restorative thing helps you feel better again.",0],
+["longing","Nostalgia means a longing for the past.","a strong wish for something far away or in the past",["a long trip","a feeling of being angry","a short rest"],"The word “nostalgia” comes from Greek words for “homecoming” and “pain or longing”.","A longing is a strong wish for something you do not have now, like a place or a time in the past.",1],
+["fatigue","One symptom of nostalgia was fatigue.","feeling very tired",["feeling very happy","feeling very hungry","feeling very cold"],"Think of how you feel after a very long day.","Fatigue is the feeling of being very, very tired.",1],
+["irregular","The soldiers had an irregular heartbeat.","not steady or normal",["very fast","very strong","very loud"],"The opposite is “regular”.","Irregular means not steady or not normal. An irregular heartbeat does not follow a regular pattern.",1],
+["trauma","Some doctors thought cowbells caused trauma to the ears and brain.","serious damage or a very bad shock",["a kind of music","a long sleep","a medicine"],"Doctors thought loud cowbells hurt the ears and brain.","Trauma is damage to the body or mind, often from a very bad shock or injury.",1],
+["forbade","Commanders forbade soldiers from singing Swiss songs.","said people must not do something",["allowed","asked","helped"],"The commanders did not want the soldiers to sing Swiss songs.","To forbid means to say that people must not do something. Forbade is the past tense.",1],
+["migration","As migration increased worldwide, nostalgia was seen in more groups.","moving to live in another place or country",["going on a short holiday","learning a new language","visiting a doctor"],"Nostalgia spread to many groups of people who moved.","Migration is when people move from one country or place to live in another.",1],
+["speculated","Psychologists speculated that nostalgia came from not wanting to leave childhood.","guessed when they were not sure",["were very sure","asked a question","gave a prize"],"The psychologists were not sure about the answer.","To speculate is to guess about something when you do not know the real answer.",1],
+["expanded","The meaning of nostalgia expanded over time.","became bigger or wider",["became smaller","stayed the same","disappeared"],"The meaning grew from one idea to a bigger one.","To expand is to become bigger or wider. The meaning grew from “homesickness” to “missing the past”.",1],
+["cascade","A cake triggered a cascade of memories for Marcel Proust.","many things coming quickly one after another",["one small thing","a type of cake","a long silence"],"Think of a waterfall: water keeps coming and coming.","A cascade is a lot of things that come quickly, one after another. In the video, one taste brought many memories.",1],
+["correlated","Negative symptoms may have been correlated with nostalgia, not caused by it.","often happening together",["always happening alone","happening in the past","happening by accident"],"Often together does not always mean one causes the other.","If two things are correlated, they often happen together. It does not mean that one causes the other.",1],
+["charitably","Nostalgia can make people act more charitably.","in a kind way that helps others",["in an angry way","in a quiet way","in a lazy way"],"Look at the word “charity”.","To act charitably is to act in a kind way that helps other people, for example by giving money or time.",1],
+["inducing","Studies have shown that inducing nostalgia can help people.","making something happen",["stopping something","forgetting something","hiding something"],"In the studies, scientists made people feel nostalgic.","To induce something is to make it happen. Inducing nostalgia means making people feel nostalgic.",1]
+];
+// IPA and simple respelling (capital letters = stressed syllable)
+const P={
+yearning:["/ˈjɜːrnɪŋ/","YUR-ning"],mercenaries:["/ˈmɜːrsəneriz/","MUR-suh-nair-eez"],discharged:["/dɪsˈtʃɑːrdʒd/","dis-CHARJD"],
+affliction:["/əˈflɪkʃən/","uh-FLIK-shun"],insomnia:["/ɪnˈsɑːmniə/","in-SOM-nee-uh"],desertion:["/dɪˈzɜːrʃən/","dih-ZUR-shun"],
+vulnerable:["/ˈvʌlnərəbəl/","VUL-ner-uh-bul"],poignant:["/ˈpɔɪnjənt/","POY-nyunt"],distress:["/dɪˈstres/","dis-TRESS"],
+restorative:["/rɪˈstɔːrətɪv/","ri-STOR-uh-tiv"],longing:["/ˈlɔːŋɪŋ/","LONG-ing"],fatigue:["/fəˈtiːɡ/","fuh-TEEG"],
+irregular:["/ɪˈreɡjələr/","ih-REG-yuh-ler"],trauma:["/ˈtrɔːmə/","TRAW-muh"],forbade:["/fərˈbæd/","fer-BAD"],
+migration:["/maɪˈɡreɪʃən/","my-GRAY-shun"],speculated:["/ˈspekjəleɪtɪd/","SPEK-yuh-lay-tid"],expanded:["/ɪkˈspændɪd/","ik-SPAN-did"],
+cascade:["/kæˈskeɪd/","kas-KAYD"],correlated:["/ˈkɔːrəleɪtɪd/","KOR-uh-lay-tid"],charitably:["/ˈtʃerɪtəbli/","CHAIR-ih-tuh-blee"],
+inducing:["/ɪnˈduːsɪŋ/","in-DOO-sing"]};
+function say(w){try{const s=window.speechSynthesis;if(!s)return;s.cancel();const u=new SpeechSynthesisUtterance(w);u.lang="en-US";u.rate=.8;s.speak(u)}catch(e){}}
+const pr=w=>`<div class="pron"><span class="ipa">${P[w][0]}</span><span class="rsp">${P[w][1]}</span><button class="icon say" aria-label="Hear the word ${w}" onclick="event.stopPropagation();say('${w}')">🔊 Listen</button></div>`;
+const app=document.getElementById("app");
+let mode="quiz",pool=[],i=0,score=0,streak=0,res=[],opts=[],locked=false,hint=false,muted=false,ac,fi=0,missedOnly=false;
+const shuf=a=>{a=[...a];for(let j=a.length-1;j>0;j--){const k=Math.random()*(j+1)|0;[a[j],a[k]]=[a[k],a[j]]}return a};
+function tone(f,d=.14,t="sine"){if(muted)return;try{ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain();o.type=t;o.frequency.value=f;g.gain.value=.07;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.stop(ac.currentTime+d)}catch(e){}}
+function burst(el,n=16){const r=el.getBoundingClientRect();for(let k=0;k<n;k++){const s=document.createElement("i");s.className="p";s.style.left=r.left+r.width/2+"px";s.style.top=r.top+r.height/2+"px";s.style.background="hsl("+(Math.random()*360|0)+" 80% 60%)";document.body.append(s);const a=Math.random()*6.28,d=60+Math.random()*100;s.animate([{transform:"translate(0,0) scale(1)",opacity:1},{transform:"translate("+Math.cos(a)*d+"px,"+(Math.sin(a)*d+40)+"px) scale(.3)",opacity:0}],{duration:850,easing:"ease-out"}).onfinish=()=>s.remove()}}
+document.getElementById("mute").onclick=e=>{muted=!muted;e.target.textContent=muted?"🔇":"🔊"};
+
+function menu(){
+ app.innerHTML=`<div class="card postcard menu"><span class="stamp">A2</span>
+ <p class="q" style="font-size:1.1rem">Learn the hard words from the TED-Ed video “Why do we feel nostalgia?”</p>
+ <div class="seg" role="group" aria-label="Mode"><button class="${mode=="quiz"?"on":""}" onclick="mode='quiz';menu()">Quiz</button><button class="${mode=="flash"?"on":""}" onclick="mode='flash';menu()">Flashcards</button></div>
+ <button class="set" onclick="start(0)"><span>Set 1</span><span>10 words</span></button>
+ <button class="set" onclick="start(1)"><span>Set 2</span><span>12 words</span></button>
+ <button class="set" onclick="start('all')"><span>All words, shuffled</span><span>22 words</span></button>
+ <p style="color:var(--mute);font-size:.9rem;margin:8px 0 0">Keys: 1–4 answer, H hint, P hear the word, Enter next.</p></div>`}
+
+function start(set,list){
+ pool=shuf(list||Q.filter(q=>set==="all"||q[6]===set));i=0;score=0;streak=0;res=[];fi=0;
+ mode==="quiz"||list?quiz():flash()}
+
+function quiz(){
+ const q=pool[i];opts=shuf([q[2],...q[3]]);locked=false;hint=false;
+ app.innerHTML=`<div class="bar"><i style="width:${i/pool.length*100}%"></i></div>
+ <div class="stats"><span>Question <b>${i+1}</b> of ${pool.length}</span><span>Points <b>${score}</b></span><span>Streak <b>${streak}</b> 🔥</span></div>
+ <div class="card postcard"><div class="word">${q[0]}</div>${pr(q[0])}<p class="sent">${q[1]}</p>
+ <p class="q">What does “${q[0]}” mean?</p>
+ ${opts.map((o,k)=>`<button class="opt" onclick="pick(${k})"><span class="k">${k+1}</span><span>${o}</span></button>`).join("")}
+ <div class="row"><button class="btn ghost" id="hb" onclick="showHint()">💡 Hint (half points)</button></div>
+ <div class="box hint hide" id="hint">${q[4]}</div><div class="box fb hide" id="fb"></div>
+ <div class="row"><button class="btn hide" id="nx" onclick="next()"></button></div></div>`}
+
+function showHint(){if(locked||hint)return;hint=true;document.getElementById("hint").classList.remove("hide");document.getElementById("hb").disabled=true;tone(520,.1)}
+
+function pick(k){
+ if(locked)return;locked=true;const q=pool[i],ok=opts[k]===q[2],bs=[...document.querySelectorAll(".opt")];
+ bs.forEach((b,n)=>{b.disabled=true;if(opts[n]===q[2])b.classList.add("ok");});
+ if(ok){streak++;const pts=(hint?5:10)+Math.min(streak-1,5)*2;score+=pts;burst(bs[k],streak>2?30:16);tone(660);setTimeout(()=>tone(880),110)}
+ else{bs[k].classList.add("no");streak=0;tone(180,.25,"sawtooth")}
+ res.push({q,ok});
+ const fb=document.getElementById("fb");fb.className="box fb "+(ok?"ok":"no");
+ fb.innerHTML=`<b>${ok?(streak>2?"On fire! ":"Correct! "):"Not quite. "}</b>${q[5]}`;
+ const nx=document.getElementById("nx");nx.classList.remove("hide");nx.textContent=i+1<pool.length?"Next question":"See results";nx.focus()}
+
+function next(){if(!locked)return;i++;i<pool.length?quiz():finish()}
+
+function finish(){
+ const c=res.filter(r=>r.ok).length,n=res.length,p=Math.round(c/n*100),miss=res.filter(r=>!r.ok).map(r=>r.q);
+ const msg=p==100?"Perfect score!":p>=80?"Great work!":p>=50?"Good effort. Try the missed words again.":"Keep practicing. You will get there.";
+ app.innerHTML=`<div class="bar"><i style="width:100%"></i></div><div class="card postcard" style="text-align:center">
+ <p class="big">${c} / ${n}</p><p class="q">${msg}</p><p style="color:var(--mute)">${score} points</p>
+ <ul class="rev" style="text-align:left">${res.map(r=>`<li><span>${r.ok?"✅":"❌"}</span><span><b>${r.q[0]}</b> <span style="color:var(--mute)">${P[r.q[0]][1]}</span><small>${r.q[2]}</small></span></li>`).join("")}</ul>
+ <div class="row" style="justify-content:center">${miss.length?`<button class="btn" onclick="retry()">Retry missed words (${miss.length})</button>`:""}
+ <button class="btn ghost" onclick="menu()">Menu</button></div></div>`;
+ window._miss=miss;if(p>=80){burst(document.querySelector(".big"),50);tone(523);setTimeout(()=>tone(659),130);setTimeout(()=>tone(784),260)}}
+function retry(){mode="quiz";start(null,window._miss)}
+
+function flash(){
+ const q=pool[fi];
+ app.innerHTML=`<div class="stats"><span>Card <b>${fi+1}</b> of ${pool.length}</span></div>
+ <div class="flip" id="fl" tabindex="0" role="button" aria-label="Flip card"><div><div class="word">${q[0]}</div>${pr(q[0])}<p class="sent">${q[1]}</p><p style="color:var(--mute);font-size:.9rem">Tap to see the meaning</p></div></div>
+ <div class="row" style="justify-content:space-between"><button class="btn ghost" onclick="fc(-1)">Back</button><button class="btn ghost" onclick="menu()">Menu</button><button class="btn" onclick="fc(1)">Next</button></div>`;
+ const f=document.getElementById("fl");
+ f.onclick=()=>{const b=f.classList.toggle("back");f.firstElementChild.innerHTML=b?`<div class="word" style="font-size:1.5rem">${q[2]}</div><p>${q[5]}</p>`:`<div class="word">${q[0]}</div>${pr(q[0])}<p class="sent">${q[1]}</p><p style="color:var(--mute);font-size:.9rem">Tap to see the meaning</p>`;tone(b?600:440,.08)}}
+function fc(d){fi=(fi+d+pool.length)%pool.length;flash()}
+
+document.addEventListener("keydown",e=>{
+ if(document.getElementById("nx")){
+  if(["1","2","3","4"].includes(e.key))pick(+e.key-1);
+  else if(e.key.toLowerCase()=="h")showHint();
+  else if(e.key.toLowerCase()=="p")say(pool[i][0]);
+  else if(e.key=="Enter"&&locked){e.preventDefault();next()}}
+ else if(document.getElementById("fl")){
+  if(e.key=="ArrowRight")fc(1);else if(e.key=="ArrowLeft")fc(-1);else if(e.key==" "){e.preventDefault();document.getElementById("fl").click()}}});
+menu();
+</script>
+</body>
+</html>
